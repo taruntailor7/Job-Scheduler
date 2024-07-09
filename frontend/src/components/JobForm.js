@@ -29,7 +29,7 @@ const JobForm = ({ updateJobs }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await axios.post('http://localhost:5000/api/jobs', job);
+        const response = await axios.post('https://job-scheduler-ykb2.onrender.com/api/jobs', job);
         updateJobs(response.data);
         setJob({ name: '', duration: '' });
         setErrors({});

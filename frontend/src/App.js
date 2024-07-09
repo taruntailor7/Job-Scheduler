@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/jobs');
+        const response = await axios.get('https://job-scheduler-ykb2.onrender.com/api/jobs');
         setJobs(response.data);
       } catch (error) {
         console.error('Error fetching jobs:', error);
@@ -33,7 +33,8 @@ function App() {
     };
     fetchJobs();
 
-    const ws = new WebSocket('ws://localhost:5000');
+    // const ws = new WebSocket('ws://localhost:5000');
+    const ws = new WebSocket('wss://job-scheduler-ykb2.onrender.com');
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === 'jobUpdate') {
