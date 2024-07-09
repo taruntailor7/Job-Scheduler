@@ -6,6 +6,7 @@ class ScheduleService {
     this.jobs = [];
     this.currentJob = null;
     this.wss = null;
+    this.isProcessing = false;
   }
 
   setWebSocketServer(wss) {
@@ -24,6 +25,7 @@ class ScheduleService {
   }
 
   async addJob(job) {
+    await job.save();  // Save the job to the database first
     this.jobs.push(job);
     this.jobs.sort((a, b) => a.duration - b.duration);
     this.broadcastJobUpdate(job);
@@ -32,29 +34,41 @@ class ScheduleService {
       this.stopCurrentJob();
     }
     
-    if (!this.currentJob) {
-      this.processNextJob();
+    if (!this.isProcessing) {
+      this.startProcessing();
     }
   }
 
+  async startProcessing() {
+    this.isProcessing = true;
+    await this.processNextJob();
+  }
+
   async processNextJob() {
-    if (!this.currentJob && this.jobs.length > 0) {
+    if (this.jobs.length > 0) {
       this.currentJob = this.jobs.shift();
+      this.currentJob.status = 'queued';
+      await this.currentJob.save();
+      this.broadcastJobUpdate(this.currentJob);
       
       // Introduce a delay before starting the job
       this.currentJob.startTimer = setTimeout(async () => {
         this.currentJob.status = 'running';
+        this.currentJob.startTime = new Date();
         await this.currentJob.save();
         this.broadcastJobUpdate(this.currentJob);
 
         this.currentJob.completionTimer = setTimeout(async () => {
           this.currentJob.status = 'completed';
+          this.currentJob.completionTime = new Date();
           await this.currentJob.save();
           this.broadcastJobUpdate(this.currentJob);
           this.currentJob = null;
-          this.processNextJob();
+          await this.processNextJob();
         }, this.currentJob.duration * 1000);
       }, 5000); // 5-second delay before starting the job
+    } else {
+      this.isProcessing = false;
     }
   }
 
