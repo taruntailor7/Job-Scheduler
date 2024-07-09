@@ -1,0 +1,67 @@
+/* frontend/src/components/JobList.css */
+.job-list-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.job-list-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.job-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.job-item {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.job-item:hover {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.job-info {
+  flex-grow: 1;
+}
+
+.job-name {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.job-duration {
+  margin: 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.job-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: white;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.no-jobs {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}

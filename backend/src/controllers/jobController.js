@@ -9,6 +9,7 @@ exports.createJob = async (req, res) => {
     scheduleService.addJob(job);
     res.status(201).json(job);
   } catch (error) {
+    console.log("Error creating job: ", error); 
     res.status(400).json({ message: error.message });
   }
 };

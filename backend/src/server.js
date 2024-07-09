@@ -6,18 +6,22 @@ const connectDB = require('./config/database');
 const jobRoutes = require('./routes/jobRoutes');
 const scheduleService = require('./services/scheduleService');
 
+const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 connectDB();
 
+// Middleware configuration
 app.use(express.json());
+app.use(cors());
 
 app.get('/', function(req, res) {
   console.log('Welcome to Job Scheduler by Apica!');
   res.send('Welcome to Job Scheduler by Apica!');
 });
+
 app.use('/api/jobs', jobRoutes);
 
 scheduleService.setWebSocketServer(wss);

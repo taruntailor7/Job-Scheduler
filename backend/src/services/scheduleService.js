@@ -1,3 +1,5 @@
+// backend/src/services/scheduleService.js
+
 const Job = require('../models/Job');
 const WebSocket = require('ws');
 
@@ -15,24 +17,30 @@ class ScheduleService {
   async addJob(job) {
     this.jobs.push(job);
     this.jobs.sort((a, b) => a.duration - b.duration);
-    this.processNextJob();
     this.broadcastJobUpdate(job);
+    if (!this.currentJob) {
+      this.processNextJob();
+    }
   }
 
   async processNextJob() {
     if (!this.currentJob && this.jobs.length > 0) {
       this.currentJob = this.jobs.shift();
-      this.currentJob.status = 'running';
-      await this.currentJob.save();
-      this.broadcastJobUpdate(this.currentJob);
-
+      
+      // Introduce a delay before starting the job
       setTimeout(async () => {
-        this.currentJob.status = 'completed';
+        this.currentJob.status = 'running';
         await this.currentJob.save();
         this.broadcastJobUpdate(this.currentJob);
-        this.currentJob = null;
-        this.processNextJob();
-      }, this.currentJob.duration * 1000);
+
+        setTimeout(async () => {
+          this.currentJob.status = 'completed';
+          await this.currentJob.save();
+          this.broadcastJobUpdate(this.currentJob);
+          this.currentJob = null;
+          this.processNextJob();
+        }, this.currentJob.duration * 1000);
+      }, 5000); // 5-second delay before starting the job
     }
   }
 
