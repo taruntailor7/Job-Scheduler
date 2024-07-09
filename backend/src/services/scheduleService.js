@@ -12,10 +12,26 @@ class ScheduleService {
     this.wss = wss;
   }
 
+  stopCurrentJob() {
+    if (this.currentJob) {
+      clearTimeout(this.currentJob.startTimer);
+      clearTimeout(this.currentJob.completionTimer);
+      this.currentJob.status = 'queued';
+      this.jobs.unshift(this.currentJob);
+      this.broadcastJobUpdate(this.currentJob);
+      this.currentJob = null;
+    }
+  }
+
   async addJob(job) {
     this.jobs.push(job);
     this.jobs.sort((a, b) => a.duration - b.duration);
     this.broadcastJobUpdate(job);
+    
+    if (this.currentJob && job.duration < this.currentJob.duration) {
+      this.stopCurrentJob();
+    }
+    
     if (!this.currentJob) {
       this.processNextJob();
     }
@@ -26,12 +42,12 @@ class ScheduleService {
       this.currentJob = this.jobs.shift();
       
       // Introduce a delay before starting the job
-      setTimeout(async () => {
+      this.currentJob.startTimer = setTimeout(async () => {
         this.currentJob.status = 'running';
         await this.currentJob.save();
         this.broadcastJobUpdate(this.currentJob);
 
-        setTimeout(async () => {
+        this.currentJob.completionTimer = setTimeout(async () => {
           this.currentJob.status = 'completed';
           await this.currentJob.save();
           this.broadcastJobUpdate(this.currentJob);
