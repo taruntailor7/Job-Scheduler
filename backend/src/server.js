@@ -17,6 +17,8 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 
+
+// Routes
 app.get('/', function(req, res) {
   console.log('Welcome to Job Scheduler by Apica!');
   res.send('Welcome to Job Scheduler by Apica!');

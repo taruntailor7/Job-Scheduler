@@ -1,5 +1,3 @@
-// backend/src/services/scheduleService.js
-
 const Job = require('../models/Job');
 const WebSocket = require('ws');
 
