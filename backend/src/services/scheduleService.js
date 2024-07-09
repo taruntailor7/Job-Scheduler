@@ -17,7 +17,7 @@ class ScheduleService {
       clearTimeout(this.currentJob.startTimer);
       clearTimeout(this.currentJob.completionTimer);
       this.currentJob.status = 'queued';
-      this.jobs.unshift(this.currentJob);
+      this.jobs.unshift(this.currentJob); // Requeue the current job
       this.broadcastJobUpdate(this.currentJob);
       this.currentJob = null;
     }
@@ -25,7 +25,7 @@ class ScheduleService {
 
   async addJob(job) {
     this.jobs.push(job);
-    this.jobs.sort((a, b) => a.duration - b.duration);
+    this.jobs.sort((a, b) => a.duration - b.duration); // Sort jobs by duration
     this.broadcastJobUpdate(job);
     
     if (this.currentJob && job.duration < this.currentJob.duration) {
@@ -40,8 +40,8 @@ class ScheduleService {
   async processNextJob() {
     if (!this.currentJob && this.jobs.length > 0) {
       this.currentJob = this.jobs.shift();
-      
-      // Introduce a delay before starting the job
+
+      // Delay before starting the job
       this.currentJob.startTimer = setTimeout(async () => {
         this.currentJob.status = 'running';
         await this.currentJob.save();

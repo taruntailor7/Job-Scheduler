@@ -17,15 +17,16 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 
-
-// Routes
-app.get('/', function(req, res) {
+// Root route
+app.get('/', (req, res) => {
   console.log('Welcome to Job Scheduler by Apica!');
   res.send('Welcome to Job Scheduler by Apica!');
 });
 
+// Job routes
 app.use('/api/jobs', jobRoutes);
 
+// Set WebSocket server for the schedule service
 scheduleService.setWebSocketServer(wss);
 
 wss.on('connection', (ws) => {
