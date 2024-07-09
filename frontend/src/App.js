@@ -31,7 +31,7 @@ function App() {
     };
     fetchJobs();
 
-    // const ws = new WebSocket('ws://localhost:5000');
+    // Initialize WebSocket connection
     const ws = new WebSocket('wss://job-scheduler-ykb2.onrender.com');
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
@@ -41,7 +41,7 @@ function App() {
     };
 
     return () => {
-      ws.close();
+      ws.close(); // Clean up WebSocket connection on component unmount
     };
   }, [updateJobs]);
 

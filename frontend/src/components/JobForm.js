@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './JobForm.css'; // We'll create this CSS file
+import './JobForm.css';
 
 const JobForm = ({ updateJobs }) => {
   const [job, setJob] = useState({ name: '', duration: '' });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
+  // Validate the form inputs
   const validateForm = () => {
     let formIsValid = true;
     let errors = {};
+
     if (!job.name.trim()) {
       formIsValid = false;
       errors.name = "Job name is required";
@@ -21,10 +23,12 @@ const JobForm = ({ updateJobs }) => {
       formIsValid = false;
       errors.duration = "Duration must be a positive number";
     }
+
     setErrors(errors);
     return formIsValid;
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
@@ -34,7 +38,7 @@ const JobForm = ({ updateJobs }) => {
         setJob({ name: '', duration: '' });
         setErrors({});
         setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 5000);
+        setTimeout(() => setSubmitted(false), 5000); // Success message disappears after 5 seconds
       } catch (error) {
         console.error('Error submitting job:', error);
         setErrors({ submit: "Error submitting job. Please try again." });

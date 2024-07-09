@@ -2,6 +2,7 @@ import React from 'react';
 import './JobList.css';
 
 const JobList = ({ jobs }) => {
+  // Function to determine status color based on job status
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending': return '#ffc107'; // yellow
