@@ -21,3 +21,25 @@ Frontend configuration:
 Additional configuration:
 As i have deployed my application backend on render and frontend on netlify so both are currently deployed so for making api calls am using in my application deployed urls and for running this in local system you need to change deployed urls to: http://localhost:5000 but without changing also this will work as they are deployed and working properly so in your local also they will work properly.
 
+
+## Here's a brief explanation of the design choices and approaches for this job scheduler application:
+
+Frontend-Backend Separation:
+  We've separated the frontend (React) and backend (Node.js) for better scalability and maintainability. This allows for independent development and deployment of each part.
+RESTful API:
+  The backend exposes a RESTful API for job management, following standard HTTP methods (GET for fetching jobs, POST for creating jobs). This provides a clear and standardized way for the frontend to interact with the backend.
+Real-time Updates with WebSockets:
+  WebSockets are used for real-time communication between the server and client. This allows for immediate updates to the job list without constant polling, improving user experience and reducing server load.
+State Management in React:
+  The frontend uses React's useState hook for local state management. For a small to medium-sized application, this is sufficient and keeps the implementation simple.
+Component-Based Architecture:
+  The frontend is built using reusable components (JobList, JobForm) for better organization and potential reusability.
+Error Handling and Validation:
+  Both frontend and backend implement error handling and validation to ensure data integrity and provide feedback to users.
+Styling:
+  CSS files are used for styling components, keeping styles separate from logic for better maintainability.
+Deployment:
+  The backend is deployed on Render, a cloud platform that simplifies deployment and scaling. The frontend can be deployed separately, allowing for independent scaling of each part of the application.
+
+These choices aim to create a scalable, maintainable, and user-friendly job scheduling application. The separation of concerns, use of modern web technologies, and focus on real-time updates create a robust foundation for the application.
+
