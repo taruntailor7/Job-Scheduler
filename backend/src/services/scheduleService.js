@@ -17,8 +17,9 @@ class ScheduleService {
       clearTimeout(this.currentJob.startTimer);
       clearTimeout(this.currentJob.completionTimer);
       this.currentJob.status = 'queued';
-      this.jobs.unshift(this.currentJob); // Requeue the current job
       this.broadcastJobUpdate(this.currentJob);
+      this.jobs.push(this.currentJob); // Add the current job back to the queue
+      this.jobs.sort((a, b) => a.duration - b.duration); // Re-sort the queue
       this.currentJob = null;
     }
   }
@@ -28,13 +29,13 @@ class ScheduleService {
     this.jobs.sort((a, b) => a.duration - b.duration); // Sort jobs by duration
     this.broadcastJobUpdate(job);
     
-    if (this.currentJob && job.duration < this.currentJob.duration) {
+    if (this.currentJob) {
+      // If there's a current job, stop it and requeue
       this.stopCurrentJob();
     }
     
-    if (!this.currentJob) {
-      this.processNextJob();
-    }
+    // Always process the next job after adding a new one
+    this.processNextJob();
   }
 
   async processNextJob() {
