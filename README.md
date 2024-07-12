@@ -6,7 +6,7 @@ CODE : https://github.com/taruntailor7/Job-Scheduler.git
 
 Backend configuration:
 - Deployed URL : https://job-scheduler-ykb2.onrender.com/
-- All Jobs : https://job-scheduler-ykb2.onrender.com/api/jobs (Backend is deployed on render from free service so it might take 1-2 minutes the all jobs so please wait for a while to                                                                  work api and application Thank you.)
+- All Jobs : https://job-scheduler-ykb2.onrender.com/api/jobs (Backend is deployed on render from free service so it might take 1-2 minutes for getting the all jobs so please wait for a while to                                                                  work api and application Thank you.)
 - Clone repository : git clone https://github.com/taruntailor7/Job-Scheduler.git
 - Inside backend directory run : npm install
 - create .env file : touch .env
